@@ -1,2 +1,2 @@
 # Pitching
-The objective of this interactive activity to to build on pitching. 
+The objective of this interactive activity is to build on delivering a pitch successfully. 
