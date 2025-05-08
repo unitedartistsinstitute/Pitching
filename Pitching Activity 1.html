@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boardroom Pitch Competition</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .header {
+            background-color: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .activity-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .timer {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .pitch-builder {
+            margin: 20px 0;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        #recordVideo {
+            background-color: #e74c3c; /* Red */
+        }
+        #recordVideo:hover {
+            background-color: #c0392b;
+        }
+        .rubric {
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .hidden {
+            display: none;
+        }
+        .pitch-display, .video-container {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+        }
+        .score-input {
+            width: 50px;
+            text-align: center;
+        }
+        .signature {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+            transition: all 0.3s;
+        }
+        .signature:hover {
+            transform: scale(1.05);
+            color: #3498db;
+        }
+        #recordingStatus {
+            font-style: italic;
+            margin: 10px 0;
+            color: #7f8c8d;
+        }
+        video {
+            border-radius: 4px;
+            margin-top: 10px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Boardroom Pitch Competition</h1>
+        <p>Show us how to pitch like a pro!</p>
+    </div>
+
+    <div class="activity-container">
+        <h2>Scenario</h2>
+        <p>You're acting as <strong>a consultant</strong>, advising a startup shoe company. Prepare a 10-minute pitch for mock investors that incorporates:</p>
+        <ul>
+            <li>Operational efficiency strategies</li>
+            <li>Tax planning insights</li>
+            <li>Investor acquisition techniques</li>
+            <li>Financial stability measures</li>
+        </ul>
+
+        <div class="timer" id="timer">10:00</div>
+        <button id="startTimer">Start Pitch Timer</button>
+        <button id="resetTimer">Reset Timer</button>
+
+        <div class="pitch-builder">
+            <h2>Pitch Builder</h2>
+            <p>Outline key components of your pitch:</p>
+            
+            <h3>Company Overview</h3>
+            <textarea id="overview" placeholder="Describe the company, market opportunity, and unique value proposition..."></textarea>
+            
+            <h3>Operational Efficiency Plan</h3>
+            <textarea id="operations" placeholder="Detail your cost structure, logistics, and efficiency measures..."></textarea>
+            
+            <h3>Financial Strategy</h3>
+            <textarea id="finance" placeholder="Explain tax planning, funding needs, and projected ROI..."></textarea>
+            
+            <h3>Investor Proposition</h3>
+            <textarea id="investor" placeholder="Why should investors back this? What's in it for them?..."></textarea>
+            
+            <button id="generatePitch">Generate Pitch Outline</button>
+        </div>
+
+        <div id="pitchOutput" class="pitch-display hidden">
+            <h2>Your Pitch Outline</h2>
+            <div id="pitchContent"></div>
+            <button id="startOver">Start Over</button>
+        </div>
+    </div>
+
+    <div class="activity-container rubric">
+        <h2>Judging Rubric</h2>
+        <p>Peers/teachers will score pitches (1-5 points per category):</p>
+        
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Criteria</th>
+                <th>Score (1-5)</th>
+            </tr>
+            <tr>
+                <td>Feasibility</td>
+                <td>Realistic financial projections and operational plans</td>
+                <td><input type="number" class="score-input" min="1" max="5"></td>
+            </tr>
+            <tr>
+                <td>Innovation</td>
+                <td>Creative solutions to market challenges</td>
+                <td><input type="number" class="score-input" min="1" max="5"></td>
+            </tr>
+            <tr>
+                <td>Alignment</td>
+                <td>Use of financial best practices (e.g., cost structures, tax planning)</td>
+                <td><input type="number" class="score-input" min="1" max="5"></td>
+            </tr>
+            <tr>
+                <td>Presentation</td>
+                <td>Clarity, confidence, and time management</td>
+                <td><input type="number" class="score-input" min="1" max="5"></td>
+            </tr>
+        </table>
+        <button id="calculateScore">Calculate Total Score</button>
+        <div id="scoreResult" class="hidden" style="font-weight: bold; margin-top: 10px;"></div>
+    </div>
+
+    <div class="activity-container video-container">
+        <h2>Record Video Pitch</h2>
+        <video id="preview" autoplay muted width="400" hidden></video>
+        <button id="startVideo">🎥 Start Camera</button>
+        <button id="recordVideo" disabled>● Record</button>
+        <button id="stopVideo" disabled>⏹ Stop</button>
+        <p id="recordingStatus">Ready to record</p>
+        <video id="playbackVideo" controls width="400" hidden></video>
+        <button id="downloadVideo" hidden>⬇ Download Video</button>
+    </div>
+
+    <div class="signature" title="Teacher+Tech × Neural Synergy × Feedback Loops">
+        &copy; 2025 <span style="font-family: monospace;">TΣʃ</span> | &#9993; <a href="mailto:unitedartistsinstitute@gmail.com">unitedartistsinstitute@gmail.com</a>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let minutes = 9;
+        let seconds = 59;
+        
+        document.getElementById('startTimer').addEventListener('click', function() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        });
+        
+        document.getElementById('resetTimer').addEventListener('click', function() {
+            clearInterval(timerInterval);
+            minutes = 9;
+            seconds = 59;
+            document.getElementById('timer').textContent = '10:00';
+        });
+        
+        function updateTimer() {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Wrap up your pitch.");
+                    return;
+                }
+                minutes--;
+                seconds = 59;
+            } else {
+                seconds--;
+            }
+            
+            const displayMinutes = minutes.toString().padStart(2, '0');
+            const displaySeconds = seconds.toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${displayMinutes}:${displaySeconds}`;
+        }
+        
+        // Pitch Builder functionality
+        document.getElementById('generatePitch').addEventListener('click', function() {
+            const overview = document.getElementById('overview').value;
+            const operations = document.getElementById('operations').value;
+            const finance = document.getElementById('finance').value;
+            const investor = document.getElementById('investor').value;
+            
+            if (!overview || !operations || !finance || !investor) {
+                alert("Please fill out all sections before generating your pitch!");
+                return;
+            }
+            
+            const pitchContent = `
+                <h3>Company Overview</h3>
+                <p>${overview}</p>
+                
+                <h3>Operational Efficiency Plan</h3>
+                <p>${operations}</p>
+                
+                <h3>Financial Strategy</h3>
+                <p>${finance}</p>
+                
+                <h3>Investor Proposition</h3>
+                <p>${investor}</p>
+            `;
+            
+            document.getElementById('pitchContent').innerHTML = pitchContent;
+            document.getElementById('pitchOutput').classList.remove('hidden');
+        });
+        
+        document.getElementById('startOver').addEventListener('click', function() {
+            document.getElementById('overview').value = '';
+            document.getElementById('operations').value = '';
+            document.getElementById('finance').value = '';
+            document.getElementById('investor').value = '';
+            document.getElementById('pitchOutput').classList.add('hidden');
+        });
+        
+        // Scoring functionality
+        document.getElementById('calculateScore').addEventListener('click', function() {
+            const inputs = document.querySelectorAll('.score-input');
+            let total = 0;
+            
+            inputs.forEach(input => {
+                const value = parseInt(input.value);
+                if (value >= 1 && value <= 5) {
+                    total += value;
+                }
+            });
+            
+            const scoreResult = document.getElementById('scoreResult');
+            scoreResult.textContent = `Total Score: ${total}/20`;
+            scoreResult.classList.remove('hidden');
+            
+            // Feedback based on score
+            if (total >= 16) {
+                scoreResult.textContent += " - Investor-ready!";
+            } else if (total >= 11) {
+                scoreResult.textContent += " - Good potential. Refine your financial strategies.";
+            } else {
+                scoreResult.textContent += " - Needs work. Study operational efficiency examples.";
+            }
+        });
+
+        // Video Recording functionality
+        let videoRecorder;
+        let videoChunks = [];
+        const preview = document.getElementById('preview');
+        const playbackVideo = document.getElementById('playbackVideo');
+        const recordingStatus = document.getElementById('recordingStatus');
+        const downloadBtn = document.getElementById('downloadVideo');
+
+        document.getElementById('startVideo').addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                preview.srcObject = stream;
+                preview.hidden = false;
+                videoRecorder = new MediaRecorder(stream);
+                
+                videoRecorder.ondataavailable = (event) => {
+                    videoChunks.push(event.data);
+                };
+                
+                videoRecorder.onstop = () => {
+                    const videoBlob = new Blob(videoChunks, { type: 'video/mp4' });
+                    const videoUrl = URL.createObjectURL(videoBlob);
+                    playbackVideo.src = videoUrl;
+                    playbackVideo.hidden = false;
+                    downloadBtn.hidden = false;
+
+                    // Set up download
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = videoUrl;
+                        a.download = 'my-pitch.mp4';
+                        a.click();
+                    };
+                };
+                
+                document.getElementById('recordVideo').disabled = false;
+                recordingStatus.textContent = "Camera ready! Click 'Record' to start.";
+            } catch (error) {
+                recordingStatus.textContent = "Error: Could not access camera/microphone.";
+                console.error(error);
+            }
+        });
+        
+        document.getElementById('recordVideo').addEventListener('click', () => {
+            videoRecorder.start();
+            document.getElementById('recordVideo').disabled = true;
+            document.getElementById('stopVideo').disabled = false;
+            recordingStatus.textContent = "Recording... Click 'Stop' when finished.";
+        });
+        
+        document.getElementById('stopVideo').addEventListener('click', () => {
+            videoRecorder.stop();
+            preview.srcObject.getTracks().forEach(track => track.stop());
+            document.getElementById('recordVideo').disabled = true;
+            document.getElementById('stopVideo').disabled = true;
+            recordingStatus.textContent = "Recording saved! Review your pitch below.";
+        });
+    </script>
+</body>
+</html>
