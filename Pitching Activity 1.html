@@ -219,7 +219,7 @@
     </div>
 
     <script>
-        // Timer functionality
+        
         let timerInterval;
         let minutes = 9;
         let seconds = 59;
@@ -254,7 +254,7 @@
             document.getElementById('timer').textContent = `${displayMinutes}:${displaySeconds}`;
         }
         
-        // Pitch Builder functionality
+        
         document.getElementById('generatePitch').addEventListener('click', function() {
             const overview = document.getElementById('overview').value;
             const operations = document.getElementById('operations').value;
@@ -292,7 +292,7 @@
             document.getElementById('pitchOutput').classList.add('hidden');
         });
         
-        // Scoring functionality
+        
         document.getElementById('calculateScore').addEventListener('click', function() {
             const inputs = document.querySelectorAll('.score-input');
             let total = 0;
@@ -308,7 +308,7 @@
             scoreResult.textContent = `Total Score: ${total}/20`;
             scoreResult.classList.remove('hidden');
             
-            // Feedback based on score
+            
             if (total >= 16) {
                 scoreResult.textContent += " - Investor-ready!";
             } else if (total >= 11) {
@@ -318,7 +318,7 @@
             }
         });
 
-        // Video Recording functionality
+        
         let videoRecorder;
         let videoChunks = [];
         const preview = document.getElementById('preview');
@@ -344,7 +344,7 @@
                     playbackVideo.hidden = false;
                     downloadBtn.hidden = false;
 
-                    // Set up download
+                    
                     downloadBtn.onclick = () => {
                         const a = document.createElement('a');
                         a.href = videoUrl;
